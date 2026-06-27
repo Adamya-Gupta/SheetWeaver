@@ -29,8 +29,9 @@ export const generateFormattedExcel = async (
     { header: 'Live Price', key: 'livePrice', width: 25 },
     { header: 'Cost Value', key: 'costValue', width: 15 },
     { header: 'Current Value', key: 'currentValue', width: 15 },
-    { header: 'Absolute Gain/Loss %', key: 'absgainlosspercent', width: 20 },
-    { header: 'Absolute Gain/Loss', key: 'absgainloss', width: 18 },
+    { header: 'Gain/Loss %', key: 'gainlosspercent', width: 15 },
+    { header: 'Gain/Loss', key: 'gainloss', width: 15 },
+    { header: '250 Day Chart', key: 'chart', width: 15 },
   ];
 
   // 2. Style Header Row
@@ -40,13 +41,22 @@ export const generateFormattedExcel = async (
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: 'FF00FF00' },
-      // bgColor: { argb: 'FF00FF00' },
     } as ExcelJS.Fill; 
     cell.font = { color: { argb: 'FF000000' }, bold: true };
+    cell.alignment = { vertical: 'middle', horizontal: 'center' };
+    cell.border = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+
   });
 
   // 3. Populate Data & Apply Formulas
   rawData.forEach((row) => {
+
+
     const rawIsin = row['ISIN']; 
     const rawName = row['Company'] || row['Stock Name'];
     const rawQty = row['No.of Shares'] || row['Quantity'];
@@ -72,11 +82,17 @@ export const generateFormattedExcel = async (
 
       newRow.getCell('currentValue').value = { formula: `${qtyAddress} * ${livePriceCell.address}` };
     
-      const absGainLossPercentCell = newRow.getCell('absgainlosspercent');
-      absGainLossPercentCell.value = { formula: `IF(${costValueCell.address}=0, 0, (${newRow.getCell('currentValue').address} - ${costValueCell.address}) / ${costValueCell.address} * 100)` };
+      const gainLossPercentCell = newRow.getCell('gainlosspercent');
+      gainLossPercentCell.value = { formula: `IF(${costValueCell.address}=0, 0, (${newRow.getCell('currentValue').address} - ${costValueCell.address}) / ${costValueCell.address})` };
+      worksheet.getColumn('gainlosspercent').numFmt = '[color50]#,##0.0%;[red]-#,##0.0%';
 
-      const absGainLossCell = newRow.getCell('absgainloss');
-      absGainLossCell.value = { formula: `${newRow.getCell('currentValue').address} - ${costValueCell.address}` };
+      const gainLossCell = newRow.getCell('gainloss');
+      gainLossCell.value = { formula: `${newRow.getCell('currentValue').address} - ${costValueCell.address}` };
+      worksheet.getColumn('gainloss').numFmt = '[color50]#,##0.00;[red]-#,##0.00';
+    
+      const chartCell = newRow.getCell('chart');
+      chartCell.value = { formula: `SPARKLINE(INDEX(GOOGLEFINANCE("${ticker}", "price", WORKDAY(TODAY(), -250), TODAY()), , 2), {"charttype", "column"; "color", "green"})` }
+      chartCell.font = {size:19};
     } 
     
     else {
@@ -88,6 +104,12 @@ export const generateFormattedExcel = async (
           pattern: 'solid', 
           fgColor: { argb: 'FFFFC7CE' } 
         } as ExcelJS.Fill;
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' }
+        };
       });
     }
   });
