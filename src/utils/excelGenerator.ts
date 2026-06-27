@@ -27,7 +27,10 @@ export const generateFormattedExcel = async (
     { header: 'Quantity', key: 'qty', width: 10 },
     { header: 'Average Price', key: 'avgPrice', width: 15 },
     { header: 'Live Price', key: 'livePrice', width: 25 },
+    { header: 'Cost Value', key: 'costValue', width: 15 },
     { header: 'Current Value', key: 'currentValue', width: 15 },
+    { header: 'Absolute Gain/Loss %', key: 'absgainlosspercent', width: 20 },
+    { header: 'Absolute Gain/Loss', key: 'absgainloss', width: 18 },
   ];
 
   // 2. Style Header Row
@@ -36,9 +39,10 @@ export const generateFormattedExcel = async (
     cell.fill = {
       type: 'pattern',
       pattern: 'solid',
-      fgColor: { argb: 'FF4F81BD' }
+      fgColor: { argb: 'FF00FF00' },
+      // bgColor: { argb: 'FF00FF00' },
     } as ExcelJS.Fill; 
-    cell.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+    cell.font = { color: { argb: 'FF000000' }, bold: true };
   });
 
   // 3. Populate Data & Apply Formulas
@@ -62,8 +66,20 @@ export const generateFormattedExcel = async (
       livePriceCell.value = { formula: `GOOGLEFINANCE("${ticker}", "price")` };
       
       const qtyAddress = newRow.getCell('qty').address;
+
+      const costValueCell = newRow.getCell('costValue');
+      costValueCell.value = { formula: `${qtyAddress} * ${newRow.getCell('avgPrice').address}` };
+
       newRow.getCell('currentValue').value = { formula: `${qtyAddress} * ${livePriceCell.address}` };
-    } else {
+    
+      const absGainLossPercentCell = newRow.getCell('absgainlosspercent');
+      absGainLossPercentCell.value = { formula: `IF(${costValueCell.address}=0, 0, (${newRow.getCell('currentValue').address} - ${costValueCell.address}) / ${costValueCell.address} * 100)` };
+
+      const absGainLossCell = newRow.getCell('absgainloss');
+      absGainLossCell.value = { formula: `${newRow.getCell('currentValue').address} - ${costValueCell.address}` };
+    } 
+    
+    else {
       missing.push(rawName);
       newRow.getCell('livePrice').value = "Requires Manual Update";
       newRow.eachCell({ includeEmpty: true }, (cell) => {
@@ -71,7 +87,7 @@ export const generateFormattedExcel = async (
           type: 'pattern', 
           pattern: 'solid', 
           fgColor: { argb: 'FFFFC7CE' } 
-        } as ExcelJS.Fill; // Fixed Type Widening
+        } as ExcelJS.Fill;
       });
     }
   });
