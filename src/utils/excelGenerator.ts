@@ -34,6 +34,14 @@ export const generateFormattedExcel = async (
     { header: '250 Day Chart', key: 'chart', width: 15 },
   ];
 
+  const thinBorder: Partial<ExcelJS.Borders> = {
+    top: { style: 'thin' },
+    left: { style: 'thin' },
+    bottom: { style: 'thin' },
+    right: { style: 'thin' }
+  };
+
+
   // 2. Style Header Row
   const headerRow = worksheet.getRow(1);
   headerRow.eachCell((cell) => {
@@ -44,19 +52,12 @@ export const generateFormattedExcel = async (
     } as ExcelJS.Fill; 
     cell.font = { color: { argb: 'FF000000' }, bold: true };
     cell.alignment = { vertical: 'middle', horizontal: 'center' };
-    cell.border = {
-      top: { style: 'thin' },
-      left: { style: 'thin' },
-      bottom: { style: 'thin' },
-      right: { style: 'thin' }
-    };
+    cell.border = thinBorder;
 
   });
 
   // 3. Populate Data & Apply Formulas
   rawData.forEach((row) => {
-
-
     const rawIsin = row['ISIN']; 
     const rawName = row['Company'] || row['Stock Name'];
     const rawQty = row['No.of Shares'] || row['Quantity'];
@@ -67,9 +68,10 @@ export const generateFormattedExcel = async (
 
     const qty = Number(rawQty) || 0;
     const avgPrice = Number(rawAvgPrice) || 0;
-    const ticker = getTicker(rawIsin, rawName); 
-    
+    const ticker = getTicker(rawIsin, rawName);
+
     const newRow = worksheet.addRow({ company: rawName, qty, avgPrice });
+
 
     if (ticker) {
       const livePriceCell = newRow.getCell('livePrice');
@@ -104,14 +106,14 @@ export const generateFormattedExcel = async (
           pattern: 'solid', 
           fgColor: { argb: 'FFFFC7CE' } 
         } as ExcelJS.Fill;
-        cell.border = {
-          top: { style: 'thin' },
-          left: { style: 'thin' },
-          bottom: { style: 'thin' },
-          right: { style: 'thin' }
-        };
       });
     }
+
+    // After populating the row, apply borders to all cells in the row
+    newRow.eachCell({ includeEmpty: true }, (cell) => {
+    cell.border = thinBorder;
+    });
+
   });
 
   setMissingTickers(Array.from(new Set(missing))); 
