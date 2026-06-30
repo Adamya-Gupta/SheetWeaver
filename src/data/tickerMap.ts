@@ -2373,7 +2373,8 @@ export const tickerDictionary: Record<string, string> = {
   "INE217A01012": "NSE:ZUARIIND",
   "INE010B01027": "NSE:ZYDUSLIFE",
   "INE768C01028": "NSE:ZYDUSWELL",
-  "INE051N01026":"BOM:539470",
+  "INE051N01026": "BOM:539470",
+  "INE802D01023": "BOM:509162",
 
   // --- Name Mappings (Fallback) ---
   "20 microns ltd": "NSE:20MICRONS",

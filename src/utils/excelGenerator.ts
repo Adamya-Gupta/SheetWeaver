@@ -23,7 +23,7 @@ export const generateFormattedExcel = async (
 
   // 1. Define Columns
   worksheet.columns = [
-    { header: 'Company', key: 'company', width: 30 },
+    { header: 'Company', key: 'company', width: 40 },
     { header: 'Quantity', key: 'qty', width: 10 },
     { header: 'Average Price', key: 'avgPrice', width: 15 },
     { header: 'Live Price', key: 'livePrice', width: 25 },
@@ -56,7 +56,10 @@ export const generateFormattedExcel = async (
 
   });
 
-  // 3. Populate Data & Apply Formulas
+  // 3. Separating the data
+  const validData: any[] = [];
+  const manualData: any[] = [];
+
   rawData.forEach((row) => {
     const rawIsin = row['ISIN']; 
     const rawName = row['Company'] || row['Stock Name'];
@@ -69,6 +72,21 @@ export const generateFormattedExcel = async (
     const qty = Number(rawQty) || 0;
     const avgPrice = Number(rawAvgPrice) || 0;
     const ticker = getTicker(rawIsin, rawName);
+
+    const processedRow = {rawName,qty,avgPrice,ticker};
+
+    if(ticker) {
+      validData.push(processedRow);
+    } else {
+      manualData.push(processedRow);
+    }
+  });
+
+    // first valid,then manual data
+    const sortedData = [...validData, ...manualData];
+
+  // 4. Populate Data & Apply Formulas
+  sortedData.forEach(({ rawName, qty, avgPrice, ticker }) => {
 
     const newRow = worksheet.addRow({ company: rawName, qty, avgPrice });
 
@@ -93,13 +111,13 @@ export const generateFormattedExcel = async (
       worksheet.getColumn('gainloss').numFmt = '[color50]#,##0.00;[red]-#,##0.00';
     
       const chartCell = newRow.getCell('chart');
-      chartCell.value = { formula: `SPARKLINE(INDEX(GOOGLEFINANCE("${ticker}", "price", WORKDAY(TODAY(), -250), TODAY()), , 2), {"charttype", "column"; "color", "green"})` }
-      chartCell.font = {size:19};
+      chartCell.value = { formula: `SPARKLINE(INDEX(GOOGLEFINANCE("${ticker}", "price", WORKDAY(TODAY(), -250), TODAY()), , 2), {"charttype", "column"; "color", "green"})` };
+
     } 
     
     else {
       missing.push(rawName);
-      newRow.getCell('livePrice').value = "Requires Manual Update";
+      newRow.getCell('livePrice').value = "Update Manually";
       newRow.eachCell({ includeEmpty: true }, (cell) => {
         cell.fill = { 
           type: 'pattern', 
@@ -109,16 +127,22 @@ export const generateFormattedExcel = async (
       });
     }
 
-    // After populating the row, apply borders to all cells in the row
+    // After populating the row, apply other properties and styles
+    
+    worksheet.properties.defaultRowHeight = 21;
+
     newRow.eachCell({ includeEmpty: true }, (cell) => {
     cell.border = thinBorder;
+    cell.alignment = { wrapText: true , vertical: 'middle', horizontal: 'center' };
+    cell.font = { name: 'Arial', bold: true};
     });
+
 
   });
 
   setMissingTickers(Array.from(new Set(missing))); 
 
-  // 4. Download File
+  // 5. Download File
   const buffer = await workbook.xlsx.writeBuffer();
   saveAs(new Blob([buffer]), 'Formatted_Portfolio.xlsx');
 };
