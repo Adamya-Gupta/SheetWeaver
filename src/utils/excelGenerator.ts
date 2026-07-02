@@ -10,13 +10,15 @@ export interface RawStockData {
   'No.of Shares'?: string;
   'Average Price'?: string;
   'Average buy price'?: string;
+  'Closing price'?: string;
+  'Closing value'?: string;
   [key: string]: any; 
 }
 
 export const generateFormattedExcel = async (
   rawData: RawStockData[], 
-  setMissingTickers: (missing: string[]) => void
-) => {
+  setMissingTickers: (missing: string[]) => void) => {
+    
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('My Portfolio');
   const missing: string[] = [];
@@ -27,12 +29,12 @@ export const generateFormattedExcel = async (
     { header: 'Company', key: 'company', width: 40 },
     { header: 'Quantity', key: 'qty', width: 10 },
     { header: 'Average Price', key: 'avgPrice', width: 15 },
-    { header: 'Live Price', key: 'livePrice', width: 25 },
+    { header: 'Live Price', key: 'livePrice', width: 15 },
     { header: 'Cost Value', key: 'costValue', width: 15 },
     { header: 'Current Value', key: 'currentValue', width: 15 },
     { header: 'Gain/Loss', key: 'gainloss', width: 15 },
     { header: 'Gain/Loss %', key: 'gainlosspercent', width: 15 },
-    { header: '250 Day Chart', key: 'chart', width: 15 },
+    { header: '250 Day Chart', key: 'chart', width: 20 },
   ];
 
   const thinBorder: Partial<ExcelJS.Borders> = {
@@ -67,14 +69,20 @@ export const generateFormattedExcel = async (
     const rawQty = row['No.of Shares'] || row['Quantity'];
     const rawAvgPrice = row['Average Price'] || row['Average buy price'];
 
+    const rawClosingPrice = row['Closing price'] || row['Live Price'];
+    const rawClosingValue = row['Closing value'] || row['Current Value'];
+
     // Skip completely empty rows
     if (!rawName) return; 
 
     const qty = Number(rawQty) || 0;
     const avgPrice = Number(rawAvgPrice) || 0;
+    const closingPrice = Number(rawClosingPrice) || 0;
+    const closingValue = Number(rawClosingValue) || 0;
+
     const ticker = getTicker(rawIsin, rawName);
 
-    const processedRow = {rawName,qty,avgPrice,ticker};
+    const processedRow = {rawName,qty,avgPrice,ticker,closingPrice,closingValue};
 
     if(ticker) {
       validData.push(processedRow);
@@ -87,39 +95,39 @@ export const generateFormattedExcel = async (
     const sortedData = [...validData, ...manualData];
 
   // Populate Data & Apply Formulas
-  sortedData.forEach(({ rawName, qty, avgPrice, ticker },index) => {
+  sortedData.forEach(({ rawName, qty, avgPrice, ticker, closingPrice, closingValue },index) => {
 
     const newRow = worksheet.addRow({ sno: index + 1, company: rawName, qty, avgPrice });
 
+    const avgPriceCelladdress = newRow.getCell('avgPrice').address;
+    const qtyAddress = newRow.getCell('qty').address;
+    const costValueCell = newRow.getCell('costValue');
+    const livePriceCell = newRow.getCell('livePrice');
+    const currentValueCell = newRow.getCell('currentValue');
+    const gainLossCell = newRow.getCell('gainloss');
+    const gainLossPercentCell = newRow.getCell('gainlosspercent');
+    const chartCell = newRow.getCell('chart');
 
+    costValueCell.value = { formula: `${qtyAddress} * ${avgPriceCelladdress}` } as ExcelJS.CellValue;
+    gainLossCell.value = { formula: `${newRow.getCell('currentValue').address} - ${costValueCell.address}` } as ExcelJS.CellValue;
+    gainLossPercentCell.value = { formula: `IF(${costValueCell.address}=0, 0, (${newRow.getCell('currentValue').address} - ${costValueCell.address}) / ${costValueCell.address})` } as ExcelJS.CellValue;
+   
+    worksheet.getColumn('gainloss').numFmt = '[color50]#,##0.00;[red]-#,##0.00';
+    worksheet.getColumn('gainlosspercent').numFmt = '[color50]#,##0.0%;[red]-#,##0.0%';
+    
     if (ticker) {
-      const avgPriceCelladdress = newRow.getCell('avgPrice').address;
-      const livePriceCell = newRow.getCell('livePrice');
       livePriceCell.value = { formula: `IFERROR(GOOGLEFINANCE("${ticker}", "price"), ${avgPriceCelladdress})` } as ExcelJS.CellValue;
-      
-      const qtyAddress = newRow.getCell('qty').address;
-
-      const costValueCell = newRow.getCell('costValue');
-      costValueCell.value = { formula: `${qtyAddress} * ${avgPriceCelladdress}` } as ExcelJS.CellValue;
-
-      newRow.getCell('currentValue').value = { formula: `${qtyAddress} * ${livePriceCell.address}` } as ExcelJS.CellValue;
-
-      const gainLossCell = newRow.getCell('gainloss');
-      gainLossCell.value = { formula: `${newRow.getCell('currentValue').address} - ${costValueCell.address}` } as ExcelJS.CellValue;
-      worksheet.getColumn('gainloss').numFmt = '[color50]#,##0.00;[red]-#,##0.00';
-
-      const gainLossPercentCell = newRow.getCell('gainlosspercent');
-      gainLossPercentCell.value = { formula: `IF(${costValueCell.address}=0, 0, (${newRow.getCell('currentValue').address} - ${costValueCell.address}) / ${costValueCell.address})` } as ExcelJS.CellValue;
-      worksheet.getColumn('gainlosspercent').numFmt = '[color50]#,##0.0%;[red]-#,##0.0%';
-
-      const chartCell = newRow.getCell('chart');
+      currentValueCell.value = { formula: `${qtyAddress} * ${livePriceCell.address}` } as ExcelJS.CellValue;
       chartCell.value = { formula: `IFERROR(SPARKLINE(INDEX(GOOGLEFINANCE("${ticker}", "price", WORKDAY(TODAY(), -250), TODAY()), , 2), {"charttype", "column"; "color", "green"}),"NO DATA")` } as ExcelJS.CellValue;
-      
     } 
     
+    // Manual Update Rows
     else {
       missing.push(rawName);
-      newRow.getCell('livePrice').value = "Update Manually";
+      livePriceCell.value = {formula: `IFERROR(GOOGLEFINANCE("", "price"),${closingPrice})`} as ExcelJS.CellValue;
+      currentValueCell.value = { formula: `IFERROR(${qtyAddress} * ${livePriceCell.address}, ${closingValue})` } as ExcelJS.CellValue;
+      chartCell.value = { formula: `IFERROR(SPARKLINE(INDEX(GOOGLEFINANCE("", "price", WORKDAY(TODAY(), -250), TODAY()), , 2), {"charttype", "column"; "color", "green"}),"Update Manually")` } as ExcelJS.CellValue;
+
       newRow.eachCell({ includeEmpty: true }, (cell) => {
         cell.fill = { 
           type: 'pattern', 
@@ -138,9 +146,7 @@ export const generateFormattedExcel = async (
     cell.font = { name: 'Arial', bold: true};
     });
 
-
   });
-
 
   // Footer Row with Totals
     const finalrow = worksheet.addRow({sno: sortedData.length + 1, company: 'Total', qty: '', avgPrice: '', livePrice: '', costValue: '', currentValue: '', gainlosspercent: '', gainloss: '', chart: '' });
@@ -167,7 +173,6 @@ export const generateFormattedExcel = async (
       cell.font = { name: 'Arial', bold: true };
       cell.border = thinBorder;
     });
-
 
   setMissingTickers(Array.from(new Set(missing))); 
 
