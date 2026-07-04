@@ -17,14 +17,17 @@ export interface RawStockData {
 
 export const generateFormattedExcel = async (
   rawData: RawStockData[], 
-  setMissingTickers: (missing: string[]) => void) => {
+  setMissingTickers: (missing: string[]) => void,
+  includeChart: boolean = true,
+  chartDays: number = 250
+  ) => {
     
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('My Portfolio');
   const missing: string[] = [];
 
   // Define Columns
-  worksheet.columns = [
+  const cols = [
     { header: 'S.No',key: 'sno', width: 10 },
     { header: 'Company', key: 'company', width: 40 },
     { header: 'Quantity', key: 'qty', width: 10 },
@@ -34,8 +37,13 @@ export const generateFormattedExcel = async (
     { header: 'Current Value', key: 'currentValue', width: 15 },
     { header: 'Gain/Loss', key: 'gainloss', width: 15 },
     { header: 'Gain/Loss %', key: 'gainlosspercent', width: 15 },
-    { header: '250 Day Chart', key: 'chart', width: 20 },
   ];
+
+  if (includeChart) {
+    cols.push({ header: `${chartDays} Day Chart`, key: 'chart', width: 20 });
+  }
+
+  worksheet.columns = cols;
 
   const thinBorder: Partial<ExcelJS.Borders> = {
     top: { style: 'thin' },
@@ -91,8 +99,8 @@ export const generateFormattedExcel = async (
     }
   });
 
-    // first valid,then manual data
-    const sortedData = [...validData, ...manualData];
+  // first valid,then manual data
+  const sortedData = [...validData, ...manualData];
 
   // Populate Data & Apply Formulas
   sortedData.forEach(({ rawName, qty, avgPrice, ticker, closingPrice, closingValue },index) => {
@@ -106,7 +114,7 @@ export const generateFormattedExcel = async (
     const currentValueCell = newRow.getCell('currentValue');
     const gainLossCell = newRow.getCell('gainloss');
     const gainLossPercentCell = newRow.getCell('gainlosspercent');
-    const chartCell = newRow.getCell('chart');
+    // const chartCell = newRow.getCell('chart');
 
     costValueCell.value = { formula: `${qtyAddress} * ${avgPriceCelladdress}` } as ExcelJS.CellValue;
     gainLossCell.value = { formula: `${newRow.getCell('currentValue').address} - ${costValueCell.address}` } as ExcelJS.CellValue;
@@ -118,7 +126,15 @@ export const generateFormattedExcel = async (
     if (ticker) {
       livePriceCell.value = { formula: `IFERROR(GOOGLEFINANCE("${ticker}", "price"), ${avgPriceCelladdress})` } as ExcelJS.CellValue;
       currentValueCell.value = { formula: `${qtyAddress} * ${livePriceCell.address}` } as ExcelJS.CellValue;
-      chartCell.value = { formula: `IFERROR(SPARKLINE(INDEX(GOOGLEFINANCE("${ticker}", "price", WORKDAY(TODAY(), -250), TODAY()), , 2), {"charttype", "column"; "color", "green"}),"NO DATA")` } as ExcelJS.CellValue;
+      // chartCell.value = { formula: `IFERROR(SPARKLINE(INDEX(GOOGLEFINANCE("${ticker}", "price", WORKDAY(TODAY(), -250), TODAY()), , 2), {"charttype", "column"; "color", "green"}),"NO DATA")` } as ExcelJS.CellValue;
+    
+      // Injecting Chart Conditionally
+     if (includeChart) {
+        newRow.getCell('chart').value = { 
+          formula: `IFERROR(SPARKLINE(INDEX(GOOGLEFINANCE("${ticker}", "price", WORKDAY(TODAY(), -${chartDays}), TODAY()), , 2), {"charttype", "column"; "color", "green"}),"NO DATA")` 
+        } as ExcelJS.CellValue;
+      }
+    
     } 
     
     // Manual Update Rows
@@ -126,7 +142,14 @@ export const generateFormattedExcel = async (
       missing.push(rawName);
       livePriceCell.value = {formula: `IFERROR(GOOGLEFINANCE("", "price"),${closingPrice})`} as ExcelJS.CellValue;
       currentValueCell.value = { formula: `IFERROR(${qtyAddress} * ${livePriceCell.address}, ${closingValue})` } as ExcelJS.CellValue;
-      chartCell.value = { formula: `IFERROR(SPARKLINE(INDEX(GOOGLEFINANCE("", "price", WORKDAY(TODAY(), -250), TODAY()), , 2), {"charttype", "column"; "color", "green"}),"Update Manually")` } as ExcelJS.CellValue;
+      // chartCell.value = { formula: `IFERROR(SPARKLINE(INDEX(GOOGLEFINANCE("", "price", WORKDAY(TODAY(), -250), TODAY()), , 2), {"charttype", "column"; "color", "green"}),"Update Manually")` } as ExcelJS.CellValue;
+
+      // Inject chart conditionally
+      if (includeChart) {
+        newRow.getCell('chart').value = { 
+          formula: `IFERROR(SPARKLINE(INDEX(GOOGLEFINANCE("", "price", WORKDAY(TODAY(), -${chartDays}), TODAY()), , 2), {"charttype", "column"; "color", "green"}),"Update Manually")` 
+        } as ExcelJS.CellValue;
+      }
 
       newRow.eachCell({ includeEmpty: true }, (cell) => {
         cell.fill = { 

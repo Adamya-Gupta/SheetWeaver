@@ -8,6 +8,9 @@ const PortfolioFormatter = () => {
   const [missingTickers, setMissingTickers] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
 
+  const [includeChart, setIncludeChart] = useState(true);
+  const [chartDays, setChartDays] = useState(250);
+
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -43,7 +46,7 @@ const PortfolioFormatter = () => {
           jsonData = XLSX.utils.sheet_to_json<RawStockData>(worksheet);
         }
 
-        await generateFormattedExcel(jsonData, setMissingTickers);
+        await generateFormattedExcel(jsonData, setMissingTickers, includeChart, chartDays);
       } catch (error) {
         console.error("Error parsing the Excel file:", error);
         alert("There was an error reading the file. Please make sure it is a valid Excel or CSV file.");
@@ -59,6 +62,37 @@ const PortfolioFormatter = () => {
   return (
     <div className="w-full max-w-2xl bg-white p-8 rounded-xl shadow-md border border-gray-100">
       <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+        
+        {/* Chart Configurations */}
+        <div className="w-full mb-6 flex flex-col sm:flex-row items-center justify-center gap-6 p-4 bg-white rounded-md shadow-sm border border-gray-200">
+          <label className="flex items-center gap-2 cursor-pointer text-gray-700 font-medium">
+            <input
+              type="checkbox"
+              checked={includeChart}
+              onChange={(e) => setIncludeChart(e.target.checked)}
+              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+              disabled={isProcessing}
+            />
+            Include Trend Chart
+          </label>
+
+          {includeChart && (
+            <label className="flex items-center gap-2 text-gray-700 font-medium">
+              Days of history:
+              <input
+                type="number"
+                min="1"
+                max="1000"
+                value={chartDays}
+                onChange={(e) => setChartDays(Number(e.target.value) || 250)}
+                className="w-20 px-2 py-1 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                disabled={isProcessing}
+              />
+            </label>
+          )}
+        </div>
+        
+        
         <label className="cursor-pointer flex flex-col items-center">
           <span className="mb-2 text-lg font-semibold text-gray-700">
             {isProcessing ? "Processing..." : "Upload Portfolio (.xlsx / .csv)"}
