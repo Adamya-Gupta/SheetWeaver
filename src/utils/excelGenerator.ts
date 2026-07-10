@@ -114,7 +114,6 @@ export const generateFormattedExcel = async (
     const currentValueCell = newRow.getCell('currentValue');
     const gainLossCell = newRow.getCell('gainloss');
     const gainLossPercentCell = newRow.getCell('gainlosspercent');
-    // const chartCell = newRow.getCell('chart');
 
     costValueCell.value = { formula: `${qtyAddress} * ${avgPriceCelladdress}` } as ExcelJS.CellValue;
     gainLossCell.value = { formula: `${newRow.getCell('currentValue').address} - ${costValueCell.address}` } as ExcelJS.CellValue;
@@ -126,7 +125,6 @@ export const generateFormattedExcel = async (
     if (ticker) {
       livePriceCell.value = { formula: `IFERROR(GOOGLEFINANCE("${ticker}", "price"), ${avgPriceCelladdress})` } as ExcelJS.CellValue;
       currentValueCell.value = { formula: `${qtyAddress} * ${livePriceCell.address}` } as ExcelJS.CellValue;
-      // chartCell.value = { formula: `IFERROR(SPARKLINE(INDEX(GOOGLEFINANCE("${ticker}", "price", WORKDAY(TODAY(), -250), TODAY()), , 2), {"charttype", "column"; "color", "green"}),"NO DATA")` } as ExcelJS.CellValue;
     
       // Injecting Chart Conditionally
      if (includeChart) {
@@ -142,7 +140,6 @@ export const generateFormattedExcel = async (
       missing.push(rawName);
       livePriceCell.value = {formula: `IFERROR(GOOGLEFINANCE("", "price"),${closingPrice})`} as ExcelJS.CellValue;
       currentValueCell.value = { formula: `IFERROR(${qtyAddress} * ${livePriceCell.address}, ${closingValue})` } as ExcelJS.CellValue;
-      // chartCell.value = { formula: `IFERROR(SPARKLINE(INDEX(GOOGLEFINANCE("", "price", WORKDAY(TODAY(), -250), TODAY()), , 2), {"charttype", "column"; "color", "green"}),"Update Manually")` } as ExcelJS.CellValue;
 
       // Inject chart conditionally
       if (includeChart) {
@@ -161,7 +158,7 @@ export const generateFormattedExcel = async (
     }
 
     // After populating the row, apply other properties and styles
-    worksheet.properties.defaultRowHeight = 21;
+    worksheet.properties.defaultRowHeight = 16;
 
     newRow.eachCell({ includeEmpty: true }, (cell) => {
     cell.border = thinBorder;
