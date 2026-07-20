@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# <img src="logo.ico" height=25px> Groww Portfolio to Excel Converter (Electron Concept) 
+
+>[!Important] 
+> ⚠️**Proof of Concept Only**
+>
+>This branch is an early-phase demonstration of building the portfolio converter using Electron.js.
+>
+>**This version is no longer being developed.** 
+>
+> 👉 **[Go to the `main` branch for the active Tauri version](../../tree/main)** (Lighter,faster and updated).
+
+## Overview
+
+This application extracts data from a Groww app portfolio and converts it into formatted Excel spreadsheets. This specific branch/repository serves solely to demonstrate that the application can be packaged using Electron.js.
+
+<table width="1000" align="center">
+<tr><td>App Preview</td></tr>
+<tr>
+<td><img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1784525850/App_Preview_obenso.png" width="900"> </td>
+</tr>
+<tr><td>Generated Output</td></tr>
+<tr>
+<td><img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1784527299/sheetspf_demo_mvygb7.png" width ="900"> </td>
+</tr>
+</table>
+
+
+## Limitations
+
+Because this relies on the Chromium engine via Electron, there are a few significant drawbacks compared to our primary build:
+* **Massive File Size:** The application takes up approximately 700MB on disk.
+* **Performance:** It consumes more memory and runs slower than the lightweight Tauri alternative.
 
 ## Getting Started
 
-First, run the development server:
+To run the development server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Note: This will likely open an Electron window, but you can also view the frontend by navigating to http://localhost:3000 in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Download
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To buld the .exe yourself:
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run build:exe
+```
+The compiled executable will be generated in the `dist` folder.
