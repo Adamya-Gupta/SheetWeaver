@@ -198,5 +198,32 @@ export const generateFormattedExcel = async (
 
   // Download File
   const buffer = await workbook.xlsx.writeBuffer();
-  saveAs(new Blob([buffer]), 'Formatted_Portfolio.xlsx');
+
+  // Safely check if the app is currently running inside the Tauri v2 webview
+  const isTauri = typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
+
+  if (isTauri) {
+    try {
+      // Dynamically import Tauri v2 Plugins to prevent Next.js SSR build errors
+      const { save } = await import('@tauri-apps/plugin-dialog');
+      const { writeFile } = await import('@tauri-apps/plugin-fs');
+
+      // 1. Open the native Windows "Save As" dialog
+      const filePath = await save({
+        filters: [{ name: 'Excel Workbook', extensions: ['xlsx'] }],
+        defaultPath: 'Formatted_Portfolio.xlsx',
+      });
+
+      // 2. If the user selects a path (and doesn't hit cancel), save natively
+      if (filePath) {
+        // exceljs outputs an ArrayBuffer, Tauri expects a Uint8Array
+        await writeFile(filePath, new Uint8Array(buffer as ArrayBuffer));
+      }
+    } catch (error) {
+      console.error('Failed to save file natively in Tauri:', error);
+    }
+  } else {
+    // Fallback for standard web browsers
+    saveAs(new Blob([buffer]), 'Formatted_Portfolio.xlsx');
+  }
 };
