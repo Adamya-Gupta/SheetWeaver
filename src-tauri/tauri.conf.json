@@ -2,7 +2,7 @@
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "SheetWeaver",
   "version": "0.1.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "com.adamya.dev",
   "build": {
     "frontendDist": "../out",
     "devUrl": "http://localhost:3000",
@@ -26,6 +26,9 @@
   "bundle": {
     "active": true,
     "targets": "all",
+    "publisher": "Adamya Gupta",
+    "copyright": "Copyright © 2026 Adamya Gupta",
+    "shortDescription": "Converts Portfolio to sheets",
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
