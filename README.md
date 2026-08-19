@@ -10,9 +10,9 @@ Taking loose threads (scattered data from different brokers) and weaving them in
 <div align="center">
 
 [![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://github.com/Adamya-Gupta/SheetWeaver/blob/main/LICENSE)
-![Google Sheets](https://img.shields.io/badge/Google%20Sheets-%2334A853.svg?style=flat-square&logo=googlesheets&logoColor=white)
-![Tauri](https://img.shields.io/badge/tauri-%2324C8DB.svg?style=flat-square&logo=tauri&logoColor=%23FFFFFF)
-![Groww](https://img.shields.io/badge/Groww-brightgreen?style=flat-square)
+[![Google Sheets](https://img.shields.io/badge/Google%20Sheets-%2334A853.svg?style=flat-square&logo=googlesheets&logoColor=white)](#)
+[![Tauri](https://img.shields.io/badge/tauri-%2324C8DB.svg?style=flat-square&logo=tauri&logoColor=%23FFFFFF)](https://v2.tauri.app/)
+[![Groww](https://img.shields.io/badge/Groww-brightgreen?style=flat-square)](https://groww.in/)
 
 
 </div>
@@ -20,9 +20,21 @@ Taking loose threads (scattered data from different brokers) and weaving them in
 ## SheetWeaver
 Converts portfolio to sheets
 
-<img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1784527299/sheetspf_demo_mvygb7.png">
+<table align="center">
+    <tr>
+        <td align="center" width=50%>
+            <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1787110568/App_UI_zb06jh.png">
+            <i><b>SheetWeaver</b> preview</i>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1784527299/sheetspf_demo_mvygb7.png">
+            <i>Generated <b>Output</b></i>
+        </td>
+    </tr>
+</table>
 
----
 
 ## How to Use
 <details>
@@ -32,9 +44,21 @@ Converts portfolio to sheets
 
 Login to groww portal: https://groww.in/
 
-<img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1786912701/Dashboard_opvged.png">
+<table align="center">
+    <tr>
+        <td align="center" width=50%>
+            <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1786912701/Dashboard_opvged.png" />
+            <i>Click the profile picture(at top right) and then click on <b>Reports</b></i>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1786912701/RepDownload_y3cjho.png" />
+            <i>Select the Stocks-Holding and then click <b>Download</b></i>
+        </td>
+    </tr>
+</table>
 
-<img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1786912701/RepDownload_y3cjho.png">
 
 ### Then upload the downloaded file to the app
 
@@ -86,7 +110,8 @@ npx tauri build
 
 ## Features to be added
 - [ ] Add Mutual Funds Option
-- [ ] Integrate more platforms 
+- [ ] Integrate more platforms
+- [ ] Option to add tickers directly 
 - [ ] Developer Version (API Key support)
 - [ ] Automatic update/fetch ISIN code
 - [ ] Automatic monthly report pdf attatched to email
@@ -117,5 +142,4 @@ Ans:
 |Size on Disk| ~700 MB | ~11 MB|
 |Performance| Slow | Fast |
 
-
-## Deployment
+---
