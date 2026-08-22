@@ -1,3 +1,5 @@
+"use client";
+
 import PortfolioFormatter from '@/components/PortfolioFormatter';
 import Image from 'next/image';
 import { Scale, Globe } from 'lucide-react';
@@ -20,7 +22,6 @@ const links = [
   { label: 'License', href: `${GITHUB_URL}/blob/main/LICENSE`, icon: <Scale size={16} /> },
 ];
  
-
 const platforms = [
   { name: 'Groww', supported: true },
   { name: 'Zerodha', supported: false },
@@ -30,8 +31,19 @@ const platforms = [
 
 ];
  
-
 export default function Home() {
+
+  const handleExternalLink = async (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
+
+    if (typeof window !== 'undefined' && '__TAURI__' in window) {
+      e.preventDefault(); // Stop standard navigation
+      
+      const { open } = await import('@tauri-apps/plugin-shell'); 
+      await open(url);
+    }
+  
+  };
+
   return (
     <main
       className="min-h-screen px-6 py-6 flex flex-col items-center"
@@ -105,7 +117,7 @@ export default function Home() {
           </div>
         </div>
         <p className="text-center text-xs mt-3" style={{ color: '#A3A29C' }}>
-         <a  href="https://www.google.com/googlefinance/disclaimer/" className='underline'>Disclaimer</a>: Quotes are not sourced from all markets and may be delayed up to 20 minutes. Information is provided 'as is' and solely for informational purposes, not for trading purposes or advice.
+         <a  href="https://www.google.com/googlefinance/disclaimer/" onClick={(e=> handleExternalLink(e,"https://www.google.com/googlefinance/disclaimer/"))} target="_blank" rel="noopener noreferrer" className='underline'>Disclaimer</a>: Quotes are not sourced from all markets and may be delayed up to 20 minutes. Information is provided 'as is' and solely for informational purposes, not for trading purposes or advice.
         </p>
       </section>
  
@@ -116,6 +128,7 @@ export default function Home() {
             <a
               key={link.label}
               href={link.href}
+              onClick={(e) => handleExternalLink(e, link.href)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-colors hover:bg-[#F0EFE9]"
@@ -129,6 +142,7 @@ export default function Home() {
           {WEBSITE_URL ? (
             <a
               href={WEBSITE_URL}
+              onClick={(e) => handleExternalLink(e, WEBSITE_URL)}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-colors hover:bg-[#F0EFE9]"

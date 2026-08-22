@@ -23,31 +23,33 @@ SheetWeaver converts bloated, static portfolio exports from brokers into clean, 
     <tr>
         <td align="center" width=50%>
             <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1787110568/App_UI_zb06jh.png">
+            <br>
             <i><b>SheetWeaver</b> preview</i>
         </td>
     </tr>
     <tr>
         <td align="center">
             <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1784527299/sheetspf_demo_mvygb7.png">
+            <br>
             <i>Generated <b>Output</b></i>
         </td>
     </tr>
 </table>
 
-## ✨ Features
+## Features
 - **📈 Live Updates:** Injects `GOOGLEFINANCE` formulas so your portfolio always reflects real-time market data.
 - **🔒 Privacy-Focused:** No databases. No cloud storage. Everything runs locally on your machine.
 - **⚡ Lightweight & Fast:** Built on Tauri, utilizing system native webviews for a minimal footprint.
 - **🆓 Free & Open Source:** Free forever. No subscriptions, and community-driven.
 
-## 📌 Current Support
+## Current Support
 At the moment, SheetWeaver is primarily designed around Groww portfolio exports.Support for additional brokers and asset classes is planned.
 
 <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1787184807/Sp_2_hvzret.png" >
 
-## 🚀 How to Use
+## How to Use
 <details>
-<summary>Click to view 3-steps guideline</summary>
+<summary>Click to view 3-step guide</summary>
 
 ### 1. Login to your Groww portal and download the report
 
@@ -92,13 +94,13 @@ Download the latest Windows release from the project's **[GitHub Releases](https
 >
 >The maintainers of SheetWeaver are not responsible for financial losses, data loss, incorrect calculations, missed transactions, incorrect portfolio values, or any other direct or indirect consequences resulting from the use of this software, to the extent permitted by applicable law.
 
-## 🛑 Limitations
+## Limitations
 - Broker report formats may change without notice.
 - Not every security may be supported by `GOOGLEFINANCE`.
 - Market data may be delayed, unavailable, or incomplete.
 - Generated formulas may behave differently depending on the spreadsheet application being used.
 
-## ❓ FAQ
+## FAQ
 
 **Q: Why should I use this when I can directly download the excel file from the platform ?**
 
@@ -110,12 +112,12 @@ Second, the default files provided by brokers are typically bloated, colorless, 
 See the difference for yourself
 <table align="center">
   <tr>
-    <td align="center" width="500px">
+    <td align="center" width="50%">
       <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1787242017/raw_excel_fqwslz.png" alt="Groww dashboard">
       <br>
       <i>Static, raw export</i>
     </td>
-    <td align="center" width="500px">
+    <td align="center" width="50%">
       <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1784527299/sheetspf_demo_mvygb7.png" alt="Groww reports page">
       <br>
       <i>Well-formatted, color-coded, and live-updated</i>
@@ -128,11 +130,11 @@ See the difference for yourself
 
 **A:** No database is used as no data is stored to make things fast and you can download the desktop app which is fully offline so your data stays on your device only.
 
-## 🧠 Technical Decisions & Rationale
+## Technical Decisions & Rationale
 
 **1. Why use the `Buy Price` as a fallback value for `Live Price` instead of the `Closing Price` provided in the broker report?**
 
-**The Google Sheets Caching Quirk:** If you are importing this .xlsx file into Google Sheets, Google often evaluates bulk finance functions as #N/A for a brief second while the data fetches. If your fallback is a hardcoded string literal (e.g., injecting 135.52 directly into the formula), Sheets sometimes caches the fallback evaluation and stops trying to poll the live API.
+**The Google Sheets Caching Quirk:** If you are importing this .xlsx file into Google Sheets, Google often evaluates bulk finance functions as `#N/A` for a brief second while the data fetches. If your fallback is a hardcoded string literal (e.g., injecting 135.52 directly into the formula), Sheets sometimes caches the fallback evaluation and stops trying to poll the live API.
 
 
 ```typescript
@@ -156,10 +158,14 @@ It is the easiest way to get live market data directly into a spreadsheet. This 
 
 Ans: The project currently favors Tauri because of its smaller runtime footprint and its suitability for a lightweight desktop application.
 
+<div align="center">
+
 |Parameter|![Electron.js](https://img.shields.io/badge/Electron-%23191970.svg?style=for-the-badge&logo=Electron&logoColor=white)|![Tauri](https://img.shields.io/badge/tauri-%2324C8DB.svg?style=for-the-badge&logo=tauri&logoColor=%23FFFFFF)|
 |---------|--------|-----|
 |SheetWeaver size after installation| ~700 MB | ~11 MB|
 |Performance| Resource-heavy | Native & Fast |
+
+</div>
 
 >[!NOTE]
 >The size figures above are project-specific observations and can change across versions and build configurations. They should not be treated as universal Electron-vs-Tauri benchmarks.
@@ -173,7 +179,7 @@ Ans: The project currently favors Tauri because of its smaller runtime footprint
 - [ ] Generate and email monthly portfolio reports
 - [ ] Add Linux Support
 
-## 🛠️ Development
+## Development
 
 ### TECHSTACK
 
