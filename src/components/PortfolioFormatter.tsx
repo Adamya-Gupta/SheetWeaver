@@ -115,6 +115,7 @@ const PortfolioFormatter = () => {
 
   const handleDrop = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+    event.stopPropagation();
     setIsDragging(false);
     if (isProcessing) return;
     const file = event.dataTransfer.files?.[0];
@@ -123,11 +124,24 @@ const PortfolioFormatter = () => {
 
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+    event.stopPropagation();
+    if (!isProcessing) setIsDragging(true);
+  };
+
+  const handleDragEnter = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
     if (!isProcessing) setIsDragging(true);
   };
 
   const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
+    event.stopPropagation();
+
+    if (event.relatedTarget && event.currentTarget.contains(event.relatedTarget as Node)) {
+      return;
+    }
+
     setIsDragging(false);
   };
 
@@ -246,6 +260,7 @@ const PortfolioFormatter = () => {
         <div
           onDrop={handleDrop}
           onDragOver={handleDragOver}
+          onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
           className="relative flex flex-col items-center justify-center text-center px-6 py-10 transition-colors"
           style={{
