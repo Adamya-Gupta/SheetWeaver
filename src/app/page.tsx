@@ -1,11 +1,11 @@
 "use client";
 
+import { useState, useEffect } from 'react';
 import PortfolioFormatter from '@/components/PortfolioFormatter';
 import Image from 'next/image';
-import { Scale, Globe } from 'lucide-react';
+import { Scale, Bug, Download, User, MessageSquare } from 'lucide-react';
 
 const GITHUB_URL = 'https://github.com/Adamya-Gupta/SheetWeaver';
-const WEBSITE_URL = ''; // "Coming soon" 
  
 const INK = '#141414';
  
@@ -19,6 +19,10 @@ function GithubIcon() {
  
 const links = [
   { label: 'GitHub', href: GITHUB_URL, icon: <GithubIcon /> },
+  { label: 'Releases', href: `${GITHUB_URL}/releases`, icon: <Download size={16} /> },
+  { label: 'Discussions', href: `${GITHUB_URL}/discussions`, icon: <MessageSquare size={16} /> },
+  { label: 'Report an Issue', href: `${GITHUB_URL}/issues/new`, icon: <Bug size={16} /> },
+  { label: 'Developer', href: 'https://github.com/Adamya-Gupta', icon: <User size={16} /> },
   { label: 'License', href: `${GITHUB_URL}/blob/main/LICENSE`, icon: <Scale size={16} /> },
 ];
  
@@ -28,20 +32,39 @@ const platforms = [
   { name: 'IND Money', supported: false },
   { name: 'Paytm Money', supported: false },
   { name: 'Kuvera', supported: false },
-
 ];
- 
+
 export default function Home() {
 
-  const handleExternalLink = async (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
+  const [appVersion, setAppVersion] = useState<string>('');
 
+  // Check for Tauri v2 environment
+  const isTauri = typeof window !== 'undefined' && 
+    ('__TAURI_INTERNALS__' in window || '__TAURI_IPC__' in window || '__TAURI__' in window);
+
+  // Fetch the version securely on the client side only if Tauri is available
+  useEffect(() => {
+    const fetchVersion = async () => {
+      if (isTauri) {
+        try {
+          const { getVersion } = await import('@tauri-apps/api/app');
+          const version = await getVersion();
+          setAppVersion(`v${version}`);
+        } catch (error) {
+          console.error("Failed to get Tauri app version:", error);
+        }
+      }
+    };
+  
+    fetchVersion();
+  }, []);
+
+  const handleExternalLink = async (e: React.MouseEvent<HTMLAnchorElement>, url: string) => {
     if (typeof window !== 'undefined' && '__TAURI__' in window) {
-      e.preventDefault(); // Stop standard navigation
-      
+      e.preventDefault(); 
       const { open } = await import('@tauri-apps/plugin-shell'); 
       await open(url);
     }
-  
   };
 
   return (
@@ -51,6 +74,7 @@ export default function Home() {
         background: 'radial-gradient(circle at 50% 0%, #FDFCFA 0%, #F6F5F1 45%, #F0EFE9 100%)',
       }}
     >
+
       <PortfolioFormatter />
 
       {/* Supported platforms */}
@@ -138,32 +162,10 @@ export default function Home() {
               {link.label}
             </a>
           ))}
- 
-          {WEBSITE_URL ? (
-            <a
-              href={WEBSITE_URL}
-              onClick={(e) => handleExternalLink(e, WEBSITE_URL)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold transition-colors hover:bg-[#F0EFE9]"
-              style={{ border: `1.5px solid ${INK}`, color: INK }}
-            >
-              <Globe size={16} />
-              Website
-            </a>
-          ) : (
-            <span
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold"
-              style={{ border: '1.5px dashed #B9B9B4', color: '#A3A29C' }}
-            >
-              <Globe size={16} />
-              Website &middot; coming soon
-            </span>
-          )}
         </div>
  
         <p className="text-xs text-center" style={{ color: '#A3A29C' }}>
-          Free & open source &middot; Sheet Weaver &middot; Built for Indian market portfolios.
+          Free & open source &middot; Sheet Weaver {appVersion && <span className="font-mono">{appVersion}</span>} {" "} &middot; Built for Indian market portfolios.
         </p>
         
       </footer>
