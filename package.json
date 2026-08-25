@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "author": "Adamya Gupta",
   "description": "Converts portfolio to sheets",
+  "license":"SEE LICENSE IN LICENSE",
   "private": true,
   "scripts": {
     "dev": "next dev",

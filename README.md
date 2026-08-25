@@ -219,6 +219,13 @@ Contributions, bug reports, feature suggestions, and improvements are welcome.
 
 Before submitting a pull request, please consider opening an issue for larger changes so the proposed approach can be discussed first.
 
+## 📜 License
+This project is licensed under a **MIT License with Attribution Requirements**. 
+
+While you are free to use, modify, and distribute the software, you must provide clear and prominent attribution to Adamya Gupta in any derivative works, tutorials, or distributions. You may not claim this software as your own original creation. 
+
+See the [LICENSE](LICENSE) file for the full legal text and enforcement details.
+
 ## ⭐️ Show Your Support
 If you found SheetWeaver helpful in organizing your investments, please consider giving the repository a star! It helps the project grow and makes it more visible to others who might benefit from it.
 
