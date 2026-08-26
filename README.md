@@ -38,28 +38,34 @@ SheetWeaver converts bloated, static portfolio exports from brokers into clean, 
 
 ## Features
 - **📈 Live Updates:** Injects `GOOGLEFINANCE` formulas so your portfolio always reflects real-time market data.
-- **🔒 Privacy-Focused:** No databases. No cloud storage. Everything runs locally on your machine.
+- **🔒 Privacy-Focused:** SheetWeaver does not use a database or cloud backend. Portfolio files are processed locally on your device.
 - **⚡ Lightweight & Fast:** Built on Tauri, utilizing system native webviews for a minimal footprint.
 - **🆓 Free & Open Source:** Free forever. No subscriptions, and community-driven.
 
-## Current Support
-At the moment, SheetWeaver is primarily designed around Groww portfolio exports.Support for additional brokers and asset classes is planned.
+## Supported Brokers
+Currently, SheetWeaver supports Groww stock-holding exports. Mutual funds and additional brokers are planned.
 
 <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1787184807/Sp_2_hvzret.png" >
 
+## Requirements
+- Windows 10 or later
+- Google account for Google Sheets
+- A supported broker portfolio export
+
+## ⬇️ Download
+Download the latest Windows release from the project's **[GitHub Releases](https://github.com/Adamya-Gupta/SheetWeaver/releases)** page and run the installer.
+
 ## How to Use
-<details>
-<summary>Click to view 3-step guide</summary>
 
-### 1. Login to your Groww portal and download the report
+### 1. Log in to your Groww portal and download the report
 
-Groww portal: https://groww.in/
+Groww : https://groww.in/
 
 <table align="center">
     <tr>
         <td align="center" >
             <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1786912701/Dashboard_opvged.png" />
-            <i>Click the profile picture(at top right) and then click on <b>Reports</b></i>
+            <i>Click the profile picture (at top right) and then click on <b>Reports</b></i>
         </td>
     </tr>
     <tr>
@@ -73,14 +79,22 @@ Groww portal: https://groww.in/
 
 ### 2. Open SheetWeaver then upload the downloaded report
 
-### 3. To view upload the generated excel file in drive and open it with googlesheets
+<img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1787715162/DragDrop_xmzv3c.gif">
 
->💡 **NOTE:** Live market data depends on `GOOGLEFINANCE` and Google's availability, supported symbols, market coverage, and update behavior.
+### 3. Upload the generated Excel file to Google Drive and open it with Google Sheets
 
-</details>
+<img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1787715163/SheetView_punhc9.gif">
 
-## ⬇️ Download
-Download the latest Windows release from the project's **[GitHub Releases](https://github.com/Adamya-Gupta/SheetWeaver/releases)** page and run the installer.
+>[!TIP] 
+>You can convert the generated data into a table and sort or filter it by metrics such as maximum amount invested, highest profit, and more.
+>
+>You can also export the spreadsheet as a [![PDF](https://img.shields.io/badge/PDF-red?style=flat-square)](#)
+
+## Limitations
+- Broker report formats may change without notice.
+- Not every security may be supported by `GOOGLEFINANCE`.
+- Market data may be delayed, unavailable, or incomplete.
+- Generated formulas may behave differently depending on the spreadsheet application being used.
 
 ## ⚠️ **Warning & Disclaimer**
 
@@ -94,13 +108,7 @@ Download the latest Windows release from the project's **[GitHub Releases](https
 >
 >The maintainers of SheetWeaver are not responsible for financial losses, data loss, incorrect calculations, missed transactions, incorrect portfolio values, or any other direct or indirect consequences resulting from the use of this software, to the extent permitted by applicable law.
 
-## Limitations
-- Broker report formats may change without notice.
-- Not every security may be supported by `GOOGLEFINANCE`.
-- Market data may be delayed, unavailable, or incomplete.
-- Generated formulas may behave differently depending on the spreadsheet application being used.
-
-## FAQ
+## ❔ FAQ
 
 **Q: Why should I use this when I can directly download the excel file from the platform ?**
 
@@ -130,7 +138,27 @@ See the difference for yourself
 
 **A:** No database is used as no data is stored to make things fast and you can download the desktop app which is fully offline so your data stays on your device only.
 
-## Technical Decisions & Rationale
+**Q: Why is no data showing in Microsoft Excel?**
+
+**A:** The `GOOGLEFINANCE` function is supported by Google Sheets and is not natively supported by Microsoft Excel. As a result, Excel cannot evaluate `=GOOGLEFINANCE()` formulas and may return an error such as `#NAME?`.
+
+If you want the generated spreadsheet to update automatically using `GOOGLEFINANCE`, open it in **Google Sheets**.
+
+**Q: Why are some stocks highlighted in red and marked "Update Manually"?**
+
+**A:**  This means that SheetWeaver was unable to find a supported ticker symbol for that stock, or that the stock is not supported by `GOOGLEFINANCE`.
+
+If you want the market price to update automatically, you can manually find the correct ticker symbol and add it to the spreadsheet. Otherwise, SheetWeaver will use the current value from the original broker report as a fallback. Keep in mind that this value may not reflect the latest market price.
+
+>[!TIP]
+>You can check whether a stock or security is supported by searching for it on [GOOGLE FINANCE](https://www.google.com/finance/beta)
+
+**Q: Is the market data real-time?**
+
+**A:** Not necessarily. `GOOGLEFINANCE` determines the availability and update behavior of market data. Some prices may be delayed, unsupported, or temporarily unavailable.
+
+
+## 💬 Technical Decisions & Rationale
 
 **1. Why use the `Buy Price` as a fallback value for `Live Price` instead of the `Closing Price` provided in the broker report?**
 
@@ -147,22 +175,32 @@ For example, if we used a hardcoded value instead of a cell reference, Sheets wo
 
 ```bash
 =IFERROR(GOOGLEFINANCE("GOOG:NASDAQ", "price"), C3) # ✔️ Will fetch the price first
-=IFERROR(GOOGLEFINANCE("GOOG:NASDAQ", "price"), 0) # ❌ Skips calling api and returns 0
+=IFERROR(GOOGLEFINANCE("GOOG:NASDAQ", "price"), 0) # ❌ Skips calling API and returns 0
 ```
 
 **2. Why GOOGLEFINANCE?**
 
-It is the easiest way to get live market data directly into a spreadsheet. This delegates the heavy lifting to Google, allowing the spreadsheet itself to request supported market data rather than requiring SheetWeaver to maintain its own costly price database or market-data infrastructure.
+We chose `GOOGLEFINANCE` because it was the simplest option to integrate with SheetWeaver and provides broad compatibility across devices through Google Sheets, without requiring SheetWeaver to maintain its own market-data infrastructure.
+
+An alternative was to use Microsoft Excel's financial functions, but some of these features require a **Microsoft 365 subscription**.
+
+For users who prefer Excel and only want to use it for documentation, Microsoft 365 provides functions such as `STOCKHISTORY`:
+
+```text
+=STOCKHISTORY("AAPL", start_date, end_date)
+``` 
+For a practical example, see this [Reference video](https://www.youtube.com/watch?v=7CqWwbcOxk4)
+
 
 **3. Why Tauri over Electron ?** 
 
-Ans: The project currently favors Tauri because of its smaller runtime footprint and its suitability for a lightweight desktop application.
+The project currently favors Tauri because of its smaller runtime footprint and its suitability for a lightweight desktop application.
 
 <div align="center">
 
 |Parameter|![Electron.js](https://img.shields.io/badge/Electron-%23191970.svg?style=for-the-badge&logo=Electron&logoColor=white)|![Tauri](https://img.shields.io/badge/tauri-%2324C8DB.svg?style=for-the-badge&logo=tauri&logoColor=%23FFFFFF)|
 |---------|--------|-----|
-|SheetWeaver size after installation| ~700 MB | ~11 MB|
+|SheetWeaver size after installation| ~700 MB | ~15 MB|
 |Performance| Resource-heavy | Native & Fast |
 
 </div>
@@ -171,13 +209,14 @@ Ans: The project currently favors Tauri because of its smaller runtime footprint
 >The size figures above are project-specific observations and can change across versions and build configurations. They should not be treated as universal Electron-vs-Tauri benchmarks.
 
 ## 🗺️ Roadmap
-- [ ] Add Mutual funds support
+- [x] Groww stock portfolio support
+- [ ] Mutual fund support
 - [ ] Integrate additional broker platforms
-- [ ] Allow users to enter tickers directly 
-- [ ] Add a Developer mode with API-key support
-- [ ] Automatically fetch/update ISIN codes
-- [ ] Generate and email monthly portfolio reports
-- [ ] Add Linux Support
+- [ ] Manual ticker symbol entry
+- [ ] Developer mode/API key support
+- [ ] Automatic ISIN lookup
+- [ ] Monthly portfolio reports
+- [ ] Linux Support
 
 ## Development
 
@@ -228,5 +267,3 @@ See the [LICENSE](LICENSE) file for the full legal text and enforcement details.
 
 ## ⭐️ Show Your Support
 If you found SheetWeaver helpful in organizing your investments, please consider giving the repository a star! It helps the project grow and makes it more visible to others who might benefit from it.
-
----
