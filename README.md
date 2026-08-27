@@ -52,8 +52,69 @@ Currently, SheetWeaver supports Groww stock-holding exports. Mutual funds and ad
 - Google account for Google Sheets
 - A supported broker portfolio export
 
-## ⬇️ Download
-Download the latest Windows release from the project's **[GitHub Releases](https://github.com/Adamya-Gupta/SheetWeaver/releases)** page and run the installer.
+## 📥 Download
+
+<table >
+  <tr>
+    <th align="center">OS</th>
+    <th align="center">Architecture</th>
+    <th align="center">Format</th>
+    <th align="center">Download</th>
+  </tr>
+
+   <!-- Windows -->
+
+  <tr>
+    <td >
+      <img src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Windows">
+    </td>
+    <td ><b>x64</b></td>
+    <td><b><code>.exe</code></b></td>
+    <td>
+      <a href="https://github.com/Adamya-Gupta/SheetWeaver/releases/download/v0.1.0/SheetWeaver_0.1.0_x64-setup.exe">
+        <img src="https://img.shields.io/badge/Download-2ea44f?style=for-the-badge&logo=windows&logoColor=white" alt="Download SheetWeaver .exe">
+      </a>
+    </td>
+  </tr>
+  
+  <!-- Linux -->
+
+  <tr >
+    <td > <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black"> </td>
+    <td colspan="3" align="center">
+        <img src="https://img.shields.io/badge/Coming%20Soon-555555?style=for-the-badge&logo=windows&logoColor=white" alt="Download">
+    </td>
+  </tr>
+
+  <!-- macOS -->
+
+  <tr>
+    <td ><img src="https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=apple&logoColor=white"> </td>
+    <td colspan="3" align="center">
+    <img src="https://img.shields.io/badge/Coming%20Soon-555555?style=for-the-badge&logo=windows&logoColor=white" alt="Download">
+    </td>
+  </tr>
+</table>
+
+<details>
+<summary>Need the MSI installer?</summary>
+
+<br>
+<a href="https://github.com/Adamya-Gupta/SheetWeaver/releases/download/v0.1.0/SheetWeaver_0.1.0_x64_en-US.msi">
+  <img src="https://img.shields.io/badge/Download-.MSI%20Installer-555555?style=for-the-badge&logo=windows&logoColor=white" alt="Download SheetWeaver MSI">
+</a>
+
+<br>
+<i>
+
+>The **`.msi` package** is an alternative for users who specifically require the Windows Installer format.
+
+</i>
+
+</details>
+
+**[View all releases →](https://github.com/Adamya-Gupta/SheetWeaver/releases)**
+
 
 ## How to Use
 
