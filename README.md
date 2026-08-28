@@ -8,11 +8,13 @@ Turning scattered broker data into clean, organized, and live-updating spreadshe
 
 <div align="center">
 
-[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](./LICENSE)
-[![Google Sheets](https://img.shields.io/badge/Google%20Sheets-%2334A853.svg?style=flat-square&logo=googlesheets&logoColor=white)](#)
 [![Tauri](https://img.shields.io/badge/tauri-%2324C8DB.svg?style=flat-square&logo=tauri&logoColor=%23FFFFFF)](https://v2.tauri.app/)
-[![Groww](https://img.shields.io/badge/Groww-brightgreen?style=flat-square)](https://groww.in/)
-
+[![Google Sheets](https://img.shields.io/badge/Google%20Sheets-%2334A853.svg?style=flat-square&logo=googlesheets&logoColor=white)](#)
+![Groww](https://img.shields.io/badge/Groww-Supported-00D09C?style=flat-square)
+[![Windows](https://img.shields.io/badge/Windows-Supported-0078D4?style=flat-square&logo=windows&logoColor=white)](#)
+![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-2ea44f?style=flat-square&logo=github)
+[![FOSS](https://img.shields.io/badge/FOSS-Free%20%26%20Open%20Source-2ea44f?style=flat-square&logo=opensourceinitiative&logoColor=white)](https://github.com/Adamya-Gupta/SheetWeaver)
+[![Downloads](https://img.shields.io/github/downloads/Adamya-Gupta/SheetWeaver/total?style=flat-square&logo=github)](https://github.com/Adamya-Gupta/SheetWeaver/releases)
 
 </div>
 
@@ -113,8 +115,30 @@ Currently, SheetWeaver supports Groww stock-holding exports. Mutual funds and ad
 
 </details>
 
-**[View all releases →](https://github.com/Adamya-Gupta/SheetWeaver/releases)**
+>[!NOTE]
+>**Windows SmartScreen warning**: SheetWeaver is a new application and is currently unsigned, so Windows may display a security warning when running the installer. When you run the installer, Windows may show a blue **"Windows protected your PC"** warning.
+>
+>Click **"More info"** → **"Run anyway"** to proceed.
 
+<div align="center">
+Windows SmartScreen warning
+<table align="center">
+  <tr>
+    <td align="center" width="48%">
+      <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1787880369/Don_t_run_kmx8hv.png" alt="Groww dashboard">
+      <br>
+      <i>Click "More info" → "Run anyway" to proceed.</i>
+    </td>
+    <td align="center"   >
+      <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1787880118/OpenFile_hsf5qz.png">
+      <br>
+      <i>Click Run and proceed.</i>
+    </td>
+  </tr>
+</table>
+</div>
+
+**[View all releases →](https://github.com/Adamya-Gupta/SheetWeaver/releases)**
 
 ## How to Use
 
@@ -317,7 +341,20 @@ npx tauri build
 ## 🤝 Contributing
 Contributions, bug reports, feature suggestions, and improvements are welcome.
 
-Before submitting a pull request, please consider opening an issue for larger changes so the proposed approach can be discussed first.
+### 💬 Before You Contribute
+
+- For **new features, major changes, or architectural changes**, please start a discussion in the [GitHub Discussions](https://github.com/Adamya-Gupta/SheetWeaver/discussions) tab before opening a pull request.
+- This helps us discuss the idea, avoid duplicated work, and agree on an approach before implementation.
+- For **small bug fixes, documentation changes, and minor improvements**, you can open a pull request directly.
+
+### 🔀 Pull Requests
+
+When submitting a pull request:
+
+- Keep the changes focused and relevant.
+- Explain what was changed and why.
+- Link the related discussion or issue when applicable.
+- Make sure the project builds and works as expected.
 
 ## 📜 License
 This project is licensed under a **MIT License with Attribution Requirements**. 
