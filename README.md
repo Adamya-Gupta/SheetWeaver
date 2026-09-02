@@ -12,8 +12,9 @@ Turning scattered broker data into clean, organized, and live-updating spreadshe
 [![Google Sheets](https://img.shields.io/badge/Google%20Sheets-%2334A853.svg?style=flat-square&logo=googlesheets&logoColor=white)](#)
 ![Groww](https://img.shields.io/badge/Groww-Supported-00D09C?style=flat-square)
 [![Windows](https://img.shields.io/badge/Windows-Supported-0078D4?style=flat-square&logo=windows&logoColor=white)](#)
-![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-2ea44f?style=flat-square&logo=github)
+[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-2ea44f?style=flat-square&logo=github)](#-contributing)
 [![FOSS](https://img.shields.io/badge/FOSS-Free%20%26%20Open%20Source-2ea44f?style=flat-square&logo=opensourceinitiative&logoColor=white)](https://github.com/Adamya-Gupta/SheetWeaver)
+[![GitHub repo size](https://img.shields.io/github/repo-size/Adamya-Gupta/SheetWeaver?style=flat-square)](https://github.com/Adamya-Gupta/SheetWeaver)
 [![Downloads](https://img.shields.io/github/downloads/Adamya-Gupta/SheetWeaver/total?style=flat-square&logo=github)](https://github.com/Adamya-Gupta/SheetWeaver/releases)
 
 </div>
@@ -125,7 +126,7 @@ Windows SmartScreen warning
 <table align="center">
   <tr>
     <td align="center" width="48%">
-      <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1787880369/Don_t_run_kmx8hv.png" alt="Groww dashboard">
+      <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1787880369/Don_t_run_kmx8hv.png" >
       <br>
       <i>Click "More info" → "Run anyway" to proceed.</i>
     </td>
@@ -156,7 +157,7 @@ Groww : https://groww.in/
     <tr>
         <td align="center" >
             <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1786912701/RepDownload_y3cjho.png" />
-            <i>Select the Stocks-Holding and then click <b>Download</b></i>
+            <i>Select the Stocks-Holdings and then click <b>Download</b></i>
         </td>
     </tr>
 </table>
@@ -195,7 +196,7 @@ Groww : https://groww.in/
 
 ## ❔ FAQ
 
-**Q: Why should I use this when I can directly download the excel file from the platform ?**
+### **Q: Why should I use this when I can directly download the excel file from the platform ?**
 
 **A:** Two main reasons!
 First, you only need to use this tool once. After that, your Excel file will automatically sync with live market data without any extra effort on your end. <br>
@@ -219,17 +220,17 @@ See the difference for yourself
 </table>
 </div>
 
-**Q: Where is the user data stored, and what about privacy?**
+### **Q: Where is the user data stored, and what about privacy?**
 
 **A:** No database is used as no data is stored to make things fast and you can download the desktop app which is fully offline so your data stays on your device only.
 
-**Q: Why is no data showing in Microsoft Excel?**
+### **Q: Why is no data showing in Microsoft Excel?**
 
 **A:** The `GOOGLEFINANCE` function is supported by Google Sheets and is not natively supported by Microsoft Excel. As a result, Excel cannot evaluate `=GOOGLEFINANCE()` formulas and may return an error such as `#NAME?`.
 
 If you want the generated spreadsheet to update automatically using `GOOGLEFINANCE`, open it in **Google Sheets**.
 
-**Q: Why are some stocks highlighted in red and marked "Update Manually"?**
+### **Q: Why are some stocks highlighted in red and marked "Update Manually"?**
 
 **A:**  This means that SheetWeaver was unable to find a supported ticker symbol for that stock, or that the stock is not supported by `GOOGLEFINANCE`.
 
@@ -238,10 +239,13 @@ If you want the market price to update automatically, you can manually find the 
 >[!TIP]
 >You can check whether a stock or security is supported by searching for it on [GOOGLE FINANCE](https://www.google.com/finance/beta)
 
-**Q: Is the market data real-time?**
+### **Q: Is the market data real-time?**
 
 **A:** Not necessarily. `GOOGLEFINANCE` determines the availability and update behavior of market data. Some prices may be delayed, unsupported, or temporarily unavailable.
 
+## System Architecture
+
+<img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1788223600/SheetWeaver.drawio_kerlwl.png">
 
 ## 💬 Technical Decisions & Rationale
 
@@ -315,6 +319,7 @@ The project currently favors Tauri because of its smaller runtime footprint and 
 [![NodeJS](https://img.shields.io/badge/Node%20js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/en)
 [![Tauri](https://img.shields.io/badge/tauri-%2324C8DB.svg?style=for-the-badge&logo=tauri&logoColor=%23FFFFFF)](https://v2.tauri.app/)
 [![EXCELJS](https://img.shields.io/badge/EXCELJS-red?style=for-the-badge)](https://github.com/exceljs/exceljs)
+[![SheetJS](https://img.shields.io/badge/SheetJS-lightgreen?style=for-the-badge&logoColor=red)](https://www.npmjs.com/package/sheetjs)
 </div>
 
 Run the development server:
