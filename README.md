@@ -8,12 +8,13 @@ Turning scattered broker data into clean, organized, and live-updating spreadshe
 
 <div align="center">
 
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](./LICENSE)
 [![Tauri](https://img.shields.io/badge/tauri-%2324C8DB.svg?style=flat-square&logo=tauri&logoColor=%23FFFFFF)](https://v2.tauri.app/)
-[![Google Sheets](https://img.shields.io/badge/Google%20Sheets-%2334A853.svg?style=flat-square&logo=googlesheets&logoColor=white)](#)
-![Groww](https://img.shields.io/badge/Groww-Supported-00D09C?style=flat-square)
-[![Windows](https://img.shields.io/badge/Windows-Supported-0078D4?style=flat-square&logo=windows&logoColor=white)](#)
+[![Google Sheets](https://img.shields.io/badge/Google%20Sheets-%2334A853.svg?style=flat-square&logo=googlesheets&logoColor=white)](https://google.com/sheets)
+[![FOSS](https://img.shields.io/badge/FOSS-Free%20%26%20Open%20Source-2ea44f?style=flat-square&logo=opensourceinitiative&logoColor=white)](https://en.wikipedia.org/wiki/Free_and_open-source_software)
+[![Groww](https://img.shields.io/badge/Groww-00D09C?style=flat-square)](https://groww.in/)
+[![Windows](https://img.shields.io/badge/Windows-Supported-0078D4?style=flat-square&logo=windows&logoColor=white)](https://en.wikipedia.org/wiki/Microsoft_Windows)
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-2ea44f?style=flat-square&logo=github)](#-contributing)
-[![FOSS](https://img.shields.io/badge/FOSS-Free%20%26%20Open%20Source-2ea44f?style=flat-square&logo=opensourceinitiative&logoColor=white)](https://github.com/Adamya-Gupta/SheetWeaver)
 [![GitHub repo size](https://img.shields.io/github/repo-size/Adamya-Gupta/SheetWeaver?style=flat-square)](https://github.com/Adamya-Gupta/SheetWeaver)
 [![Downloads](https://img.shields.io/github/downloads/Adamya-Gupta/SheetWeaver/total?style=flat-square&logo=github)](https://github.com/Adamya-Gupta/SheetWeaver/releases)
 
@@ -245,7 +246,11 @@ If you want the market price to update automatically, you can manually find the 
 
 ## System Architecture
 
+<div align="center">
+
 <img src="https://res.cloudinary.com/daylxkzkt/image/upload/v1788223600/SheetWeaver.drawio_kerlwl.png">
+
+</div>
 
 ## 💬 Technical Decisions & Rationale
 
@@ -290,7 +295,7 @@ The project currently favors Tauri because of its smaller runtime footprint and 
 |Parameter|![Electron.js](https://img.shields.io/badge/Electron-%23191970.svg?style=for-the-badge&logo=Electron&logoColor=white)|![Tauri](https://img.shields.io/badge/tauri-%2324C8DB.svg?style=for-the-badge&logo=tauri&logoColor=%23FFFFFF)|
 |---------|--------|-----|
 |SheetWeaver size after installation| ~700 MB | ~15 MB|
-|Performance| Resource-heavy | Native & Fast |
+|Performance| Resource heavy | Native & Fast |
 
 </div>
 
@@ -362,11 +367,9 @@ When submitting a pull request:
 - Make sure the project builds and works as expected.
 
 ## 📜 License
-This project is licensed under a **MIT License with Attribution Requirements**. 
+This project is licensed under a **MIT License**. 
 
-While you are free to use, modify, and distribute the software, you must provide clear and prominent attribution to Adamya Gupta in any derivative works, tutorials, or distributions. You may not claim this software as your own original creation. 
-
-See the [LICENSE](LICENSE) file for the full legal text and enforcement details.
+See the [LICENSE](LICENSE) file for more information.
 
 ## ⭐️ Show Your Support
 If you found SheetWeaver helpful in organizing your investments, please consider giving the repository a star! It helps the project grow and makes it more visible to others who might benefit from it.
